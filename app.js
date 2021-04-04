@@ -2,7 +2,7 @@ let Express = require('express');
 let bodyParser = require('body-parser');
 const Mongoose = require('mongoose');
 
-let port = process.env.port || 8085;
+let port = process.env.port || 8000;
 let dbUrl = 'mongodb://localhost:27017/clumsy_bird_read_server';
 let app = Express();
 
