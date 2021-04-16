@@ -4,14 +4,18 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
   },
   "author": "zhangxinyu",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
-    "mongoose": "^5.5.6",
+    "mongoose": "^5.6.2",
     "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }

@@ -4,7 +4,6 @@ const _ = require('underscore');
 
 
 exports.isrepeat = (req,res) => {
-    console.log("isrepeat",req.body)
     let _name =  req.body.username
     userModel.findOne({username: _name},(err,target) => {
         if (err) {
@@ -15,10 +14,8 @@ exports.isrepeat = (req,res) => {
             })
         }
         if (target == null) {
-            console.log("新用户")
             res.json({repeat:false})
         }else {
-            console.log("老用户")
             res.json({repeat:true})
         }
     })
@@ -108,12 +105,10 @@ exports.list = (req,res) => {
 
 
 exports.save = (req,res) => {
-    console.log("req",req.body)
     let reqData = req.body;
     const _id =  reqData._id || reqData.id
     let newData
     if (_id) {
-        console.log("老用户")
         userModel.findById(reqData._id,(err,target_data) => {
             if (err) {
                 console.log(err)
@@ -134,7 +129,6 @@ exports.save = (req,res) => {
             })
         })
     } else {
-        console.log("新用户")
         newData = new userModel(reqData)
         newData.save((err,saved_data) => {
             if (err) {

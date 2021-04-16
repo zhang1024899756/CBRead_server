@@ -2,16 +2,13 @@ let Express = require('express');
 let bodyParser = require('body-parser');
 const Mongoose = require('mongoose');
 
-let port = process.env.port || 8000;
-let dbUrl = 'mongodb://localhost:27017/clumsy_bird_read_server';
+let port = process.env.port || 8080;
+let dbUrl = 'mongodb://mongo:27017/clumsy_bird_read_server'; // see docker-compose.yml nodeapp links mongo
 let app = Express();
 
 //连接数据库
-Mongoose.connect(dbUrl,err => {
-    if (!err) {
-        console.log('数据库成功连接到：' + dbUrl);
-    }
-});
+Mongoose.connect(dbUrl,{useNewUrlParser: true});
+Mongoose.connection.once('open', ()=>console.log(`数据库于${port}端口连接成功...`));
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit:'50mb',extended: false}));

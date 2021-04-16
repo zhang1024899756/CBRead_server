@@ -39,6 +39,7 @@ exports.delete = (req,res) => {
 
 
 exports.list = (req,res) => {
+    console.log(req)
     CommentModel.findAll((err,comment_list) => {
         if (err) {
             return res.json({
@@ -55,7 +56,6 @@ exports.list = (req,res) => {
 
 
 exports.save = (req,res) => {
-    console.log("req.body",req.body)
     let reqComment = req.body
     let newComment
     if (reqComment._id) {
