@@ -1,27 +1,32 @@
 const Mongoose = require('mongoose');
 
 const Schema = Mongoose.Schema;
+const LinkId = Schema.Types.ObjectId;
+const savePre = require('./common/savePre')
+const shemaStatic = require('./common/schemaStatic')
 
-
-let CommentSchema = new Schema({
-    title: String,
-    images: [],
-    content: String,
-    type: {
+const generatorSchema = new Schema({
+    content: {
         type: String,
-        default: "normal",
+        require: true
     },
-    book: {},
-    author: {},
-    star: {
-        type: Number,
-        default: 0,
+    from: {
+        type: LinkId,
+        ref: 'user',
+        require: true
     },
-    comments: [],
-    commentNumber: {
-        type: Number,
-        default: 0,
+    to: {
+        type: LinkId,
+        ref: 'user'
     },
+    parentId: {
+        type: String,
+        default: null
+    },
+    replay: [{
+        type: LinkId,
+        ref: 'comment'
+    }],
     meta: {
         createAt: {
             type: Date,
@@ -33,30 +38,11 @@ let CommentSchema = new Schema({
         }
     }
 })
+
 //save前更新操作时间
-CommentSchema.pre('save',function (next) {
-    console.log(this)
-    if (this.isNew) {
-        this.meta.createAt = this.meta.updateAt = Date.now()
-    } else {
-        this.meta.updateAt = Date.now()
-    }
-    next()
-})
+generatorSchema.pre('save', savePre)
 //封装静态查询
-CommentSchema.statics = {
-    findAll: function(callback) {
-        return this
-            .find({})
-            .sort('meta.updateAt')
-            .exec(callback)
-    },
-    findById: function(id,callback) {
-        return this
-            .findOne({_id: id})
-            .exec(callback)
-    }
-}
+generatorSchema.statics = shemaStatic
 
 
-module.exports = Mongoose.model('comment', CommentSchema)
+module.exports = Mongoose.model('comment', generatorSchema)

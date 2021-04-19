@@ -20,7 +20,7 @@ RUN npm install nodemon -g
 # 再次拷贝源码至container的src目录
 # 如果映射了宿主机文件系统，则可不做
 # 手动提前将app源码准备到对应映射到的文件夹
-COPY . /src
+# COPY . /src
 
 # 容器将监听8080端口
 EXPOSE 8080

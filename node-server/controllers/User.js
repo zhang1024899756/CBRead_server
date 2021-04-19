@@ -98,7 +98,8 @@ exports.list = (req,res) => {
         }
         res.json({
             success: true,
-            data: data_list
+            data: data_list,
+            res_at: new Date().getTime()
         })
     })
 }

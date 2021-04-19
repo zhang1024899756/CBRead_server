@@ -6,26 +6,7 @@ const savePre = require('./common/savePre')
 const shemaStatic = require('./common/schemaStatic')
 
 const generatorSchema = new Schema({
-    username: {
-        type: String,
-        require: true,
-    },
-    password: {
-        type: String,
-        require: true,
-    },
-    call: {
-        type: String,
-        default: "江湖新手",
-    },
-    signature: {
-        type: String,
-        default: "初入江湖，一脸懵～",
-    },
-    cover: {
-        type: String,
-        default: "",
-    },
+    data: {},
     meta: {
         createAt: {
             type: Date,
@@ -43,5 +24,4 @@ generatorSchema.pre('save',savePre)
 //封装静态查询
 generatorSchema.statics = shemaStatic
 
-
-module.exports = Mongoose.model('user', generatorSchema)
+module.exports = Mongoose.model('book', generatorSchema)

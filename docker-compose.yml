@@ -8,6 +8,7 @@ services:
       - "6379"
     networks:
       - front-tier
+      
   mongo:
     restart: always
     image: mongo:latest
@@ -15,6 +16,7 @@ services:
       - "27017"
     networks:
       - front-tier
+
   nodeapp1:
     build:
       context: ./node-server
@@ -25,42 +27,17 @@ services:
       - mongo
     ports:
       - "8080"
+    volumes:
+      - /Users/zxy/Desktop/CBRead_server/node-server:/src
+      - /Users/zxy/Desktop/CBRead_server/node-server/.npmrc:/root/.npmrc
     networks:
       - front-tier
 
-  nodeapp2:
-    build:
-      context: ./node-server
-      dockerfile: Dockerfile
-    restart: always
-    links:
-      - redis
-      - mongo
-    ports:
-      - "8080"
-    networks:
-      - front-tier
-
-  nodeapp3:
-    build:
-      context: ./node-server
-      dockerfile: Dockerfile
-    restart: always
-    links:
-      - redis
-      - mongo
-    ports:
-      - "8080"
-    networks:
-      - front-tier
-  
   nginx:
     build: ./nginx
     restart: always
     links:
       - nodeapp1
-      - nodeapp2
-      - nodeapp3
     ports:
       - "80:80"
     networks:
