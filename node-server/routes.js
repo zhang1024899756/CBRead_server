@@ -1,6 +1,7 @@
 const Express = require('express');
 const router = Express.Router();
 
+const Auth = require('./utils/auth')
 
 const Comment = require('./controllers/Comment');
 const User = require('./controllers/User');
@@ -17,10 +18,10 @@ router.get('/detail/comment',Comment.detail);
 router.post('/repeat/user',User.isrepeat);
 router.post('/login/user',User.login);
 router.post('/register/user',User.register);
-router.post('/edit/user',User.editUserInfo);
-router.get('/list/user',User.list);
-router.post('/delete/user',User.delete);
-router.get('/detail/user',User.detail);
+router.post('/edit/user', Auth, User.editUserInfo);
+router.get('/list/user', Auth, User.list);
+router.post('/delete/user', Auth, User.delete);
+router.get('/detail/user', Auth, User.detail);
 
 
 

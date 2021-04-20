@@ -1,5 +1,6 @@
 const userModel = require('../models/userModel');
 const _ = require('underscore');
+const Utils = require('../utils/index')
 
 
 // 判断用户是否存在
@@ -20,7 +21,7 @@ exports.isrepeat = (req,res) => {
         }
     })
 }
-// 用户登陆
+// 用户登陆,颁发token
 exports.login = (req,res) => {
     let _name =  req.body.username
     let _password = req.body.password
@@ -37,9 +38,11 @@ exports.login = (req,res) => {
                 data: "用户不存在"
             })
         }else if (_password == target.password) {
+            const token = Utils.generatorJwt(target._id) // 颁发token
             res.json({
                 success: true,
-                data: target
+                data: target,
+                token: token
             })
         } else {
             res.json({
