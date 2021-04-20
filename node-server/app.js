@@ -1,5 +1,4 @@
 let Express = require('express');
-let bodyParser = require('body-parser');
 const Mongoose = require('mongoose');
 
 let port = process.env.port || 8080;
@@ -11,8 +10,8 @@ let app = Express();
 Mongoose.connect(dbUrl,{useNewUrlParser: true});
 Mongoose.connection.once('open', ()=>console.log(`数据库于${mongoUrl}端口连接成功...`));
 
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit:'50mb',extended: false}));
+app.use(Express.json({limit: '50mb'}));
+app.use(Express.urlencoded({limit:'50mb',extended: false}));
 
 //跨域
 app.use(function(req, res, next) {

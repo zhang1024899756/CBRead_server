@@ -15,8 +15,9 @@ router.get('/detail/comment',Comment.detail);
 
 
 router.post('/repeat/user',User.isrepeat);
-router.post('/check/user',User.check);
-router.post('/save/user',User.save);
+router.post('/login/user',User.login);
+router.post('/register/user',User.register);
+router.post('/edit/user',User.editUserInfo);
 router.get('/list/user',User.list);
 router.post('/delete/user',User.delete);
 router.get('/detail/user',User.detail);
