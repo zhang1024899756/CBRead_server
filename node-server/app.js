@@ -9,7 +9,7 @@ let app = Express();
 //连接数据库
 Mongoose.connect(dbUrl,{useNewUrlParser: true});
 Mongoose.connection.once('open', ()=>console.log(`数据库于${Config.mongoPort}端口连接成功...`));
-
+// 解析
 app.use(Express.json({limit: '50mb'}));
 app.use(Express.urlencoded({limit:'50mb',extended: false}));
 
@@ -21,8 +21,8 @@ app.use(function(req, res, next) {
 });
 
 // 静态资源
-app.use(`/${Config.virtualPath}`, Express.static(`${Config.staticPath}`))
-// app.use(`/${Config.virtualPath}`, Express.static('utils'))
+app.use(`${Config.virtualPath}`, Express.static(`${Config.staticPath}`))
+// app.use('/assets', Express.static('/media_data'))
 
 // 路由
 app.use(require('./routes.js'));

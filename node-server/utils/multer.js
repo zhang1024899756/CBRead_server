@@ -8,7 +8,7 @@ module.exports = multer.diskStorage({
         console.log('file', file)
         let fileType = distributionType(file)
         
-        let _path = path.join(`/${Config.staticPath}/${fileType}`)
+        let _path = path.join(`${Config.staticPath}/${fileType}`)
         try {
             fs.statSync(_path);
         } catch (error) {
