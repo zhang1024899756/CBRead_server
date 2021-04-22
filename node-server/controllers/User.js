@@ -8,7 +8,6 @@ exports.isrepeat = (req,res) => {
     let _name =  req.body.username
     userModel.findOne({username: _name},(err,target) => {
         if (err) {
-            console.log(err.message)
             return res.json({
                 success: false,
                 message: "Database query error! Please inform the administrator for maintenance"

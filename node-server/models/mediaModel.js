@@ -24,4 +24,4 @@ generatorSchema.pre('save',savePre)
 //封装静态查询
 generatorSchema.statics = shemaStatic
 
-module.exports = Mongoose.model('book', generatorSchema)
+module.exports = Mongoose.model('media', generatorSchema)

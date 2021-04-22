@@ -1,14 +1,14 @@
 let Express = require('express');
 const Mongoose = require('mongoose');
+const Config = require('./utils/config')
 
-let port = process.env.port || 8080;
-let mongoUrl = 27017;
-let dbUrl = `mongodb://mongo:${mongoUrl}/clumsy_bird_read_server`; // see docker-compose.yml nodeapp links mongo
+let port = process.env.port || Config.server_port;
+let dbUrl = `mongodb://mongo:${Config.mongoPort}/${Config.server_name}`; // see docker-compose.yml nodeapp links mongo
 let app = Express();
 
 //连接数据库
 Mongoose.connect(dbUrl,{useNewUrlParser: true});
-Mongoose.connection.once('open', ()=>console.log(`数据库于${mongoUrl}端口连接成功...`));
+Mongoose.connection.once('open', ()=>console.log(`数据库于${Config.mongoPort}端口连接成功...`));
 
 app.use(Express.json({limit: '50mb'}));
 app.use(Express.urlencoded({limit:'50mb',extended: false}));
@@ -20,6 +20,11 @@ app.use(function(req, res, next) {
     next();
 });
 
+// 静态资源
+app.use(`/${Config.virtualPath}`, Express.static(`${Config.staticPath}`))
+// app.use(`/${Config.virtualPath}`, Express.static('utils'))
+
+// 路由
 app.use(require('./routes.js'));
 
 app.listen(port,() => {

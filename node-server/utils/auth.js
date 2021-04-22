@@ -8,14 +8,18 @@ const Config = require('./config')
 passport.use(new BearerStrategy(
     function(token, done) {
         //这里查询token是否有效
-        let verifyToken = jwt.verify(token, Config.JWT_PRIVATE_KEY)
-        userModel.findById(verifyToken.id,(err,target) => {
-            if (target) {
-                //有效的话在done方法的第二个参数传递用户对象，然后路由的req.user对象即为当前对象
-                done(null,target);
-            } else {
-                done(null,false)
+        jwt.verify(token, Config.JWT_PRIVATE_KEY,(err, verifyToken)=> {
+            if (err) {
+                return done(null,false)
             }
+            userModel.findById(verifyToken.id,(err,target) => {
+                if (target) {
+                    //有效的话在done方法的第二个参数传递用户对象，然后路由的req.user对象即为当前对象
+                    done(null,target);
+                } else {
+                    done(null,false)
+                }
+            })
         })
     }
 ));
