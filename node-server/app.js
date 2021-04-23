@@ -27,6 +27,10 @@ app.use(`${Config.virtualPath}`, Express.static(`${Config.staticPath}`))
 // 路由
 app.use(require('./routes.js'));
 
+process.on('unhandledRejection', error => {
+    console.log('process error', error.message);
+});
+
 app.listen(port,() => {
     console.log('====================================');
     console.log("服务在..." + port + "...端口运行.....");
