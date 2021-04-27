@@ -31,6 +31,21 @@ exports.renameDirectory = (req) => {
         })
     })
 }
+// 删除目录
+exports.removeDirectory = (req) => {
+    const { body, user } = req
+    // 拿到location，找到对应位置，删除
+    return new Promise((resolve,reject) => {
+        if (!body.location) {
+            resolve({success: false, message: '缺少目录路由'})
+        }
+        // 使用封装工具函数处理Structure
+        changeStructure(body, user, 'remove',(result) => {
+            resolve(result)
+        })
+    })
+
+}
 // 封装Structure变更工具
 const changeStructure = (body, user, action, callback) => {
     let _directoryModel
@@ -44,6 +59,7 @@ const changeStructure = (body, user, action, callback) => {
             newDir.structure = JSON.stringify(_structure)
             _directoryModel = _.extend(dir_target,newDir)
         } else {
+            // 此处处理没有查询到目录系统的情况
             if (action === 'create') {
                 // 没有创建目录系统则新建一个
                 let _structure = [{
@@ -55,7 +71,7 @@ const changeStructure = (body, user, action, callback) => {
                     creator: user.id || user._id,
                     structure: JSON.stringify(_structure)
                 })
-            } else if (action === 'rename') {
+            } else if (action === 'rename' || action === 'remove') {
                 callback({success: false, message: JSON.stringify(err)})
                 return
             }
@@ -70,28 +86,21 @@ const changeStructure = (body, user, action, callback) => {
         })
     })
 }
-// 轮询结构,新建目录
+// 轮询结构,新建/重命名/删除目录等操作
 const pollingStruct = (_structure, body, action) => {
     let newlocation = ''
     if(body.location === '/') {
-        // 根路由时
-        if (_structure.length>0) {
-            let deepArr = _structure[_structure.length-1].location.split('/')
-            newlocation = setDeepArr(deepArr)
-        } else {
-            newlocation = '/0/'
+        if (action === 'create') {
+            // 根目录创建目录
+            return createInRoot(_structure, body, newlocation)
+        } else if (action === 'remove') {
+            // location为根目录时直接重置目录系统
+            return []
         }
-        // 追加目录数据
-        _structure.push({
-            name: body.name || '新目录',
-            location: newlocation,
-            child: []
-        })
-        return _structure
     }
     // 非根路由
     // 返回修改完的数据
-    return _structure.map((struct, ) => {
+    return _structure.map((struct,index) => {
         // 匹配到目录路由时
         if (struct.location === body.location) {
             // 不同动作使用不同编辑函数
@@ -99,6 +108,8 @@ const pollingStruct = (_structure, body, action) => {
                 struct = createDirWithStruct(struct, body, newlocation)
             } else if(action === 'rename') {
                 struct = renameDirWithStruct(struct, body)
+            } else if(action === 'remove') {
+                _structure.splice(index,1)
             }
         } else if(struct.location !== body.location && struct.child.length > 0) {
             // 递归查询孩子
@@ -107,6 +118,22 @@ const pollingStruct = (_structure, body, action) => {
         // 不要忘了map return
         return struct
     })
+}
+// 根目录创建目录
+const createInRoot = (_structure, body, newlocation) => {
+    if (_structure.length>0) {
+        let deepArr = _structure[_structure.length-1].location.split('/')
+        newlocation = setDeepArr(deepArr)
+    } else {
+        newlocation = '/0/'
+    }
+    // 追加目录数据
+    _structure.push({
+        name: body.name || '新目录',
+        location: newlocation,
+        child: []
+    })
+    return _structure
 }
 // 重命名目录的struct函数
 const renameDirWithStruct = (struct, body) => {

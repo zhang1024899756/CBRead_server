@@ -15,15 +15,17 @@ const User = require('./controllers/User');
 router.get('/get/directory', Auth, Directory.get);
 router.post('/new/directory', Auth, Directory.new);
 router.post('/rename/directory', Auth, Directory.rename);
+router.post('/remove/directory', Auth, Directory.remove);
 router.post('/clear/directory', Auth, Directory.clear);
 
 
 
 /**资源媒体模块**/
 /**此模块与虚拟目录模块强关联**/ 
+router.post('/get/media', Auth, Media.get);
 router.post('/upload/media', Auth, upload.array('file', 5), Media.upload);
-router.post('/delete/media',Media.delete);
-router.post('/move/media',Media.move);
+router.post('/delete/media', Auth, Media.delete);
+router.post('/move/media', Auth, Media.move);
 
 
 /**用户模块**/ 

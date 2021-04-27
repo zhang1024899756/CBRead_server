@@ -1,44 +1,49 @@
 const mediaModel = require('../models/mediaModel');
 const _ = require('underscore');
 const Utils = require('../utils/index')
-const Config = require('../utils/config')
+const commonMedia = require('./common/media')
 
 // 上传媒体资源
 exports.upload = async (req,res) => {
-    let media = await saveMediaAsync(req)
+    let media = await commonMedia.saveMediaAsync(req)
     res.json({
         success: true,
         data: media
     })
 }
-// 保存媒体资源
-const saveMediaAsync = (req) => {
-    return new Promise((resolve,reject)=> {
-        let mediaArr = [];
-        req.files.map( (file, index) => {
-            let path = file.path.replace(/\\/g, "/").replace(`${Config.staticPath}`, `${Config.virtualPath}`);
-            let _mediaModel = new mediaModel({
-                src: path,
-                name: file.originalname.split('.')[0] || 'new media',
-                creator: req.user,
-                mimetype: file.mimetype,
-                encoding: file.encoding,
-                location: req.body.location || '/'
-            })
-            _mediaModel.save((err, saved_data)=> {
-                if (saved_data) {
-                    mediaArr.push(saved_data)
-                    if (index === req.files.length - 1) {
-                        return resolve(mediaArr)   
-                    }
-                }
-            })
-        })
-    })
+// 获取资源列表
+exports.get = async (req,res) => {
+    const { body } = req
+    if (!body.location) {return res.json({success: false, message: '缺少目录路由'})}
+    let result = await commonMedia.getList(req)
+    res.json(result)
 }
 
+// 删除资源by id
+// 多个ID使用逗号分隔
 exports.delete = (req,res) => {
-
+    const { body } = req
+    if (!body.id) {return res.json({success: false, message: '缺少id'})}
+    body.id = body.id.split(',')
+    mediaModel.remove({_id: {$in: body.id}}, (err,delete_item) => {
+        if (err) {
+            return res.json({
+                success: false,
+                message: err.message
+            })
+        }
+        if (delete_item.deletedCount > 0) {
+            return res.json({
+                success: true,
+                data: {message: '删除成功', ...delete_item}
+            })
+        } else {
+            res.json({
+                success: false,
+                data: {message: '资源不存在'}
+            })
+        }
+    })
 }
 
 exports.move = (req,res) => {
