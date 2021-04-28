@@ -22,7 +22,7 @@ router.post('/clear/directory', Auth, Directory.clear);
 
 /**资源媒体模块**/
 /**此模块与虚拟目录模块强关联**/ 
-router.post('/get/media', Auth, Media.get);
+router.get('/get/media', Auth, Media.get);
 router.post('/upload/media', Auth, upload.array('file', 5), Media.upload);
 router.post('/delete/media', Auth, Media.delete);
 router.post('/move/media', Auth, Media.move);
@@ -41,8 +41,5 @@ router.get('/detail/user', Auth, User.detail);
 // router.get('/list/comment',Comment.list);
 // router.post('/delete/comment',Comment.delete);
 // router.get('/detail/comment',Comment.detail);
-
-
-
 
 module.exports = router;

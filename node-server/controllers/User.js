@@ -1,4 +1,5 @@
 const userModel = require('../models/userModel');
+const Pagination = require('mongoose-sex-page');
 const _ = require('underscore');
 const Utils = require('../utils/index')
 
@@ -91,20 +92,10 @@ exports.delete = (req,res) => {
     })
 }
 // 用户列表
-exports.list = (req,res) => {
-    userModel.findAll((err,data_list) => {
-        if (err) {
-            return res.json({
-                success: false,
-                message: err.message
-            })
-        }
-        res.json({
-            success: true,
-            data: data_list,
-            res_at: new Date().getTime()
-        })
-    })
+exports.list = async (req,res) => {
+    const { page, size, keywords } = req.query
+    const result = await Pagination(userModel).find().page(page || 1).size(size || 10).exec()
+    res.json({ success: true, data: result})
 }
 // 用户名密码注册
 exports.register = (req,res) => {

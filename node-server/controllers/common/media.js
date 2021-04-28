@@ -39,21 +39,6 @@ const fsUnlink = (item) => {
         })
     })
 }
-
-// 获取资源列表
-exports.getList = (req) => {
-    const { body } = req
-    return new Promise((resolve,reject) => {
-        mediaModel.find({location: body.location},(err, dir_target)=> {
-            if (dir_target) {
-                resolve({success: true,data: dir_target})
-            } else {
-                resolve({success: false,message: JSON.stringify(err)})
-            }
-        })
-    })
-}
-
 // 保存媒体资源
 exports.saveMediaAsync = (req) => {
     return new Promise((resolve,reject)=> {
