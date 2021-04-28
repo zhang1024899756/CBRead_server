@@ -98,7 +98,15 @@ const pollingStruct = (_structure, body, action) => {
             return []
         }
     }
-    // 非根路由
+    // 非根路由一级的删除操作单独处理
+    if (action === 'remove' && body.location.split('/').length === 3) {
+        const index = _structure.findIndex(struct => {
+            return struct.location === body.location
+        })
+        _structure.splice(index,1)
+        return _structure
+    }
+    // 多级
     // 返回修改完的数据
     return _structure.map((struct,index) => {
         // 匹配到目录路由时
