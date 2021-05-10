@@ -19,7 +19,7 @@ services:
 
   nodeapp1:
     build:
-      context: ./node-server
+      context: ./baise-server
       dockerfile: Dockerfile
     restart: always
     links:
@@ -28,8 +28,8 @@ services:
     ports:
       - "8080"
     volumes:
-      - /Users/zxy/Desktop/CBRead_server/node-server:/src
-      - /Users/zxy/Desktop/CBRead_server/node-server/.npmrc:/root/.npmrc
+      - /Users/zxy/Desktop/CBRead_server/baise-server:/src
+      - /Users/zxy/Desktop/CBRead_server/baise-server/.npmrc:/root/.npmrc
     networks:
       - front-tier
 

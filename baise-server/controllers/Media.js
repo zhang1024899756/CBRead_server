@@ -13,7 +13,7 @@ exports.upload = async (req,res) => {
 exports.get = async (req,res) => {
     const { page, size, location, keywords } = req.query
     if (!location) {return res.json({success: false, message: '缺少目录路由'})}
-    const result = await Pagination(mediaModel).find({location: location}).page(page || 1).size(size || 10).exec()
+    const result = await Pagination(mediaModel).find({location: location}).page(page || 1).size(size || 20).exec()
     res.json({ success: true, data: result })
 }
 // 删除资源by id
