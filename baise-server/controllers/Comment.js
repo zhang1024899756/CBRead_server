@@ -17,9 +17,6 @@ exports.detail = (req,res) => {
         })
     })
 }
-
-
-
 exports.delete = (req,res) => {
     console.log(req.body)
     let target = req.body.id
@@ -36,8 +33,6 @@ exports.delete = (req,res) => {
         })
     })
 }
-
-
 exports.list = (req,res) => {
     console.log(req)
     CommentModel.findAll((err,comment_list) => {
@@ -53,8 +48,6 @@ exports.list = (req,res) => {
         })
     })
 }
-
-
 exports.save = (req,res) => {
     let reqComment = req.body
     let newComment

@@ -9,14 +9,12 @@ exports.new = async (req,res) => {
     const result = await commonDirectory.createDirectory(req)
     return res.json(result)
 }
-
 // 重命名目录
 exports.rename = async (req,res) => {
     // 调用自定义封装工具来处理重命名
     const result = await commonDirectory.renameDirectory(req)
     return res.json(result)
 }
-
 // 删除目录
 // 删除目录会将子目录和目录下文件一起删除
 // 目录和资源文件是链接结构而非寄生结构，所以注意分别删除
@@ -30,7 +28,6 @@ exports.remove = async (req,res) => {
     const resultM = await commonMedia.removeMediaWithRemoveDirectory(req)
     return res.json({directory: resultD, media: resultM})
 }
-
 // 获取用户目录结构
 exports.get = (req,res) => {
     const { user } = req
@@ -48,7 +45,6 @@ exports.get = (req,res) => {
         }
     })
 }
-
 // 重置用户的文件目录系统
 // 注意重置文件系统意味着删除所有虚拟目录，资源和目录之间的链接将被打断
 exports.clear = (req,res) => {
